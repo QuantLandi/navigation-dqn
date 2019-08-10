@@ -28,7 +28,7 @@ I used a relatively simple neural network with 2 fully-connected hidden layers a
 ![Plot_of_Rewards](scores_over_time_plot.png)
 
 ### Ideas for future work
-Next ideas to explore to descrease the number of episodes needed to solve the environment:
+Next ideas to explore to decrease the number of episodes needed to solve the environment:
 - Different values of discount rate, learning rate and epsilon-decay rate.
 - Different number of layers, units per layer and activation function
 - Different algorithmic solutions, such as:
