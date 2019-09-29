@@ -4,7 +4,6 @@ from agent import Agent
 import time
 import matplotlib.pyplot as plt
 
-# filename = "C:/Users/aless/Google Drive/Machine Learning/udacity/deep-rl/navigation_dqn/Banana_Windows_x86_64/Banana.exe"
 filename = "Banana_Windows_x86_64/Banana.exe"
 env = UnityEnvironment(file_name=filename)
 # initialize agent
