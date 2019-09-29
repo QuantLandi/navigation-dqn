@@ -11,7 +11,7 @@ import torch.optim as optim
 BUFFER_SIZE = 10000     # replay buffer size
 BATCH_SIZE = 64         # minibatch size
 GAMMA = 0.99            # discount factor
-TAU = 0.001             # for soft update of target parameters
+TAU = 0.001             # target parameters soft update rate
 LR = 0.0005             # learning rate 
 UPDATE_EVERY = 4        # how often to update the network
 
@@ -33,26 +33,27 @@ class Agent():
         self.action_size = action_size
         self.seed = random.seed(seed)
 
-        # Q-Network
+        # initialize local and target Q-Networks
         self.qnetwork_local = QNetwork(state_size, action_size, seed).to(device)
         self.qnetwork_target = QNetwork(state_size, action_size, seed).to(device)
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=LR)
 
-        # Replay memory
-        self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, seed)
+        # initialize replay buffer
+        self.replay_buffer = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, seed)
         # Initialize time step (for updating every UPDATE_EVERY steps)
         self.t_step = 0
     
     def step(self, state, action, reward, next_state, done):
-        # Save experience in replay memory
-        self.memory.add(state, action, reward, next_state, done)
+        # store experience tuple in replay buffer
+        self.replay_buffer.add(state, action, reward, next_state, done)
         
         # Learn every UPDATE_EVERY time steps.
         self.t_step = (self.t_step + 1) % UPDATE_EVERY
         if self.t_step == 0:
-            # If enough samples are available in memory, get random subset and learn
-            if len(self.memory) > BATCH_SIZE:
-                experiences = self.memory.sample()
+            # if enough samples in replay_buffer,
+            # get random batch and perform one learning step
+            if len(self.replay_buffer) > BATCH_SIZE:
+                experiences = self.replay_buffer.sample()
                 self.learn(experiences, GAMMA)
 
     def act(self, state, eps=0.):
