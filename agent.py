@@ -47,8 +47,7 @@ class Agent():
         # store experience tuple in replay buffer
         self.replay_buffer.add(state, action, reward, next_state, done)
         
-        # Learn every UPDATE_EVERY time steps.
-#         self.t_step = (self.t_step + 1) % UPDATE_EVERY
+        # perform learning step every UPDATE_EVERY time steps
         self.t_step += 1
         is_time_to_update_weights = (self.t_step % UPDATE_EVERY) == 0
         if is_time_to_update_weights:
