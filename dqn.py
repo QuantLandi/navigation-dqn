@@ -32,7 +32,7 @@ def dqn_algorithm(agent, env, brain_name, max_n_episodes=2000, max_n_steps=1000,
         score = 0
         # loop through steps within each episode
         is_episode_over = False
-        step_count = 1
+        agent.t_step = 1
         while not is_episode_over:
             # pick action
             action = agent.act(state, epsilon)
@@ -47,8 +47,8 @@ def dqn_algorithm(agent, env, brain_name, max_n_episodes=2000, max_n_steps=1000,
             score += reward
             # if episode is over or max_n_steps reached, end loop
             # otherwise, do one more step
-            is_episode_over = is_episode_over or (step_count >= max_n_steps)
-            step_count += 1
+            is_episode_over = is_episode_over or (agent.t_step >= max_n_steps)
+            agent.t_step += 1
         # anneal epsilon
         epsilon = max(epsilon_min, epsilon_decay_rate*epsilon)
         # keep track of most recent score

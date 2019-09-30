@@ -48,8 +48,10 @@ class Agent():
         self.replay_buffer.add(state, action, reward, next_state, done)
         
         # Learn every UPDATE_EVERY time steps.
-        self.t_step = (self.t_step + 1) % UPDATE_EVERY
-        if self.t_step == 0:
+#         self.t_step = (self.t_step + 1) % UPDATE_EVERY
+        self.t_step += 1
+        is_time_to_update_weights = (self.t_step % UPDATE_EVERY) == 0
+        if is_time_to_update_weights:
             # if enough samples in replay_buffer,
             # get random batch and perform one learning step
             if len(self.replay_buffer) > BATCH_SIZE:
