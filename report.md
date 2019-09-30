@@ -13,12 +13,12 @@ Two key features of this algorithm are Experience Replay and Fixed Q-Targets:
 During training, I used an epsilon-greedy behaviour policy. The initial value of `epsilon` was `1.0`, linearly annealed to `0.1` at a decay rate of `0.995`.
 The DQN agent's hyperparameters were the following:
 ```
-BUFFER_SIZE = int(1e5)  # replay buffer size
+BUFFER_SIZE = 10000     # replay buffer size
 BATCH_SIZE = 64         # minibatch size
 GAMMA = 0.99            # discount factor
-TAU = 1e-3              # for soft update of target parameters
-LR = 5e-4               # learning rate 
-UPDATE_EVERY = 4        # how often to update the network
+TAU = 0.001             # Q-network target parameters soft update rate
+LR = 0.0005             # Q-network optimizer learning rate 
+UPDATE_EVERY = 4        # Q-network update frequency
 ```
 
 ### Q-network model architecture
