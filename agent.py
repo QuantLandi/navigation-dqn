@@ -11,9 +11,9 @@ import torch.optim as optim
 BUFFER_SIZE = 10000     # replay buffer size
 BATCH_SIZE = 64         # minibatch size
 GAMMA = 0.99            # discount factor
-TAU = 0.001             # target parameters soft update rate
-LR = 0.0005             # learning rate 
-UPDATE_EVERY = 4        # how often to update the network
+TAU = 0.001             # Q-network target parameters soft update rate
+LR = 0.0005             # Q-network optimizer learning rate 
+UPDATE_EVERY = 4        # Q-network update frequency
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -85,7 +85,6 @@ class Agent():
             gamma (float): discount factor
         """
         states, actions, rewards, next_states, dones = experiences
-        ## TODO: compute and minimize the loss
         # get max predicted Q values for next states from target models
         Q_targets_next = self.qnetwork_target(next_states).detach().max(1)[0].unsqueeze(1)
         # compute Q targets for current states
@@ -99,7 +98,7 @@ class Agent():
         loss.backward()
         self.optimizer.step()
 
-        # ------------------- update target network ------------------- #
+        # target network soft update
         self.soft_update(self.qnetwork_local, self.qnetwork_target, TAU)                     
 
     def soft_update(self, local_model, target_model, tau):
