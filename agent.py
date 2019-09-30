@@ -141,7 +141,7 @@ class ReplayBuffer:
         self.replay_buffer.append(e)
     
     def sample(self):
-        """Randomlys sample a batch of experiences from replay_buffer"""
+        """Randomly sample a batch of experiences from replay_buffer"""
         experiences = random.sample(self.replay_buffer, k=self.batch_size)
 
         states = torch.from_numpy(np.vstack([e.state for e in experiences if e is not None])).float().to(device)
