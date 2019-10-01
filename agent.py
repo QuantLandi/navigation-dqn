@@ -12,7 +12,7 @@ BUFFER_SIZE = 10000     # replay buffer size
 BATCH_SIZE = 64         # minibatch size
 GAMMA = 0.99            # discount factor
 TAU = 0.001             # Q-network target parameters soft update rate
-LR = 0.0005             # Q-network optimizer learning rate 
+LR = 0.0005             # Q-network optimizer learning rate
 UPDATE_EVERY = 4        # Q-network update frequency
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -40,8 +40,16 @@ class Agent():
 
         # initialize replay buffer
         self.replay_buffer = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, seed)
-        # Initialize time step (for updating every UPDATE_EVERY steps)
+        # initialize time step
         self.t_step = 0
+
+        # initialize parameters
+        self.buffer_size = BUFFER_SIZE
+        self.batch_size = BATCH_SIZE
+        self.gamma = GAMMA
+        self.tau = TAU
+        self.lr = LR
+        self.update_every = UPDATE_EVERY
     
     def step(self, state, action, reward, next_state, done):
         # store experience tuple in replay buffer

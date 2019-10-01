@@ -1,6 +1,7 @@
-# import torch
 import numpy as np
+import torch
 from collections import deque
+from utils import plot_scores
 
 
 def dqn_algorithm(agent, env, brain_name, max_n_episodes=2000, max_n_steps=1000,
@@ -20,9 +21,10 @@ def dqn_algorithm(agent, env, brain_name, max_n_episodes=2000, max_n_steps=1000,
         epsilon_decay_rate : float
             Multiplicative factor (per episode) for decreasing epsilon
     """
-    all_scores = []                      # list of scores from all episodes
-    last_100_scores = deque(maxlen=100)  # last 100 scores
-    epsilon = epsilon_start              # initialize epsilon
+    all_scores = []
+    last_100_scores = deque(maxlen=100)
+    last_100_scores_rolling_means = []
+    epsilon = epsilon_start
     # loop through episodes
     is_game_over = False
     episode_count = 1
@@ -55,6 +57,10 @@ def dqn_algorithm(agent, env, brain_name, max_n_episodes=2000, max_n_steps=1000,
         last_100_scores.append(score)
         all_scores.append(score)
         last_100_scores_mean = np.mean(last_100_scores)
+        last_100_scores_rolling_means.append(last_100_scores_mean)
+        plot_scores(all_scores, last_100_scores_rolling_means, episode_count,
+                    agent.buffer_size, agent.batch_size, agent.gamma, agent.tau,
+                    agent.lr, agent.update_every, agent.qnetwork_local)
         print('\rEpisode {}\tAverage Score: {:.2f}'.format(episode_count, last_100_scores_mean), end="")
         completed_100_episodes = episode_count % 100 == 0
         if completed_100_episodes:
@@ -68,5 +74,3 @@ def dqn_algorithm(agent, env, brain_name, max_n_episodes=2000, max_n_steps=1000,
         # otherwise, play one more episode
         is_game_over = is_problem_solved or (episode_count >= max_n_episodes)
         episode_count += 1
-    return all_scores
-
