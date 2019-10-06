@@ -65,7 +65,7 @@ class Agent():
                 experiences = self.replay_buffer.sample()
                 self.learn(experiences, GAMMA)
 
-    def act(self, state, eps=0.):
+    def act(self, state, epsilon=0.):
         """Returns actions for given state as per current policy.
         
         Params
@@ -79,11 +79,13 @@ class Agent():
             action_values = self.qnetwork_local(state)
         self.qnetwork_local.train()
 
-        # Epsilon-greedy action selection
-        if random.random() > eps:
-            return np.int32(np.argmax(action_values.cpu().data.numpy()))
-        else:
-            return np.int32(random.choice(np.arange(self.action_size)))
+        # epsilon-greedy action selection
+        action_values = action_values.cpu().data.numpy()[0]
+        optimal_action = np.argmax(action_values)
+        random_action = np.random.choice(np.arange(self.action_size))
+        action = np.random.choice([optimal_action, random_action],
+                                  p=[1-epsilon, epsilon])
+        return np.int32(action)
 
     def learn(self, experiences, gamma):
         """Update value parameters using given batch of experience tuples.
