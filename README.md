@@ -21,7 +21,7 @@ Please install [Unity ML-Agents](https://github.com/Unity-Technologies/ml-agents
 
 ### Getting Started
 ```
-git clone https://github.com/QuantLandi/navigation.git
+git clone https://github.com/QuantLandi/navigation-dqn.git
 cd navigation
 your-markdown-viewer report.md
 python run.py
